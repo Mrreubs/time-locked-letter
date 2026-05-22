@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@view-transition {
+  navigation: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body {
+  margin: 0;
+  background: #0f0f0f;
+  min-height: 100svh;
+}
