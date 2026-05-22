@@ -1,14 +1,16 @@
-import { useMemo } from 'react';
 import type { Letter } from '../types';
 import { Countdown } from './Countdown';
 
 interface Props {
   letter: Letter;
   onDelete: (id: string) => void;
+  now: number;
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return 'Unknown date';
+  return d.toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -17,11 +19,8 @@ function formatDate(iso: string): string {
   });
 }
 
-export function LetterCard({ letter, onDelete }: Props) {
-  const isUnlocked = useMemo(
-    () => new Date(letter.unlockDate).getTime() <= Date.now(),
-    [letter.unlockDate]
-  );
+export function LetterCard({ letter, onDelete, now }: Props) {
+  const isUnlocked = new Date(letter.unlockDate).getTime() <= now;
 
   return (
     <div
@@ -49,7 +48,7 @@ export function LetterCard({ letter, onDelete }: Props) {
         {isUnlocked ? (
           <span className="text-emerald-400 font-semibold">Unlocked</span>
         ) : (
-          <Countdown target={letter.unlockDate} />
+          <Countdown target={letter.unlockDate} now={now} />
         )}
         <span className="mx-2">·</span>
         <span>Unlocks {formatDate(letter.unlockDate)}</span>

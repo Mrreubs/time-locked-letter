@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 interface TimeLeft {
   days: number;
   hours: number;
@@ -7,8 +5,10 @@ interface TimeLeft {
   seconds: number;
 }
 
-function calcTimeLeft(target: Date): TimeLeft {
-  const diff = target.getTime() - Date.now();
+function calcTimeLeft(target: Date, now: number): TimeLeft {
+  const targetTime = target.getTime();
+  if (isNaN(targetTime)) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  const diff = targetTime - now;
   if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
   return {
     days: Math.floor(diff / 86400000),
@@ -20,19 +20,11 @@ function calcTimeLeft(target: Date): TimeLeft {
 
 interface Props {
   target: string;
+  now: number;
 }
 
-export function Countdown({ target }: Props) {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
-    calcTimeLeft(new Date(target))
-  );
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setTimeLeft(calcTimeLeft(new Date(target)));
-    }, 1000);
-    return () => clearInterval(id);
-  }, [target]);
+export function Countdown({ target, now }: Props) {
+  const timeLeft = calcTimeLeft(new Date(target), now);
 
   if (timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0) {
     return <span className="text-emerald-400 font-semibold">Unlocked</span>;

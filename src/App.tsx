@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLetters } from './hooks/useLetters';
 import { LetterForm } from './components/LetterForm';
 import { LetterCard } from './components/LetterCard';
@@ -6,6 +6,12 @@ import { LetterCard } from './components/LetterCard';
 export default function App() {
   const { letters, addLetter, deleteLetter } = useLetters();
   const [showForm, setShowForm] = useState(false);
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
 
   const sorted = useMemo(
     () => [...letters].sort(
@@ -71,6 +77,7 @@ export default function App() {
                 key={letter.id}
                 letter={letter}
                 onDelete={deleteLetter}
+                now={now}
               />
             ))}
           </div>

@@ -12,6 +12,7 @@ export function LetterForm({ onSubmit }: Props) {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!recipient.trim() || !content.trim() || !unlockDate) return;
+    if (new Date(unlockDate).getTime() <= Date.now()) return;
     onSubmit({
       recipient: recipient.trim(),
       content: content.trim(),

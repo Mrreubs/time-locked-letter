@@ -16,7 +16,11 @@ export function useLetters() {
   const [letters, setLetters] = useState<Letter[]>(loadLetters);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(letters));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(letters));
+    } catch {
+      // storage full or disabled — in-memory state still works for this session
+    }
   }, [letters]);
 
   const addLetter = useCallback((letter: Omit<Letter, 'id' | 'createdAt'>) => {
