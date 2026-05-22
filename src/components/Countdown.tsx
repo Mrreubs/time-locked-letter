@@ -24,17 +24,17 @@ interface Props {
 }
 
 export function Countdown({ target, now }: Props) {
-  const timeLeft = calcTimeLeft(new Date(target), now);
+  const t = calcTimeLeft(new Date(target), now);
 
-  if (timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0) {
-    return <span className="text-emerald-400 font-semibold">Unlocked</span>;
+  if (t.days === 0 && t.hours === 0 && t.minutes === 0 && t.seconds === 0) {
+    return <span>Unlocked</span>;
   }
 
   return (
-    <span className="font-mono text-amber-400 tabular-nums">
-      {timeLeft.days}d {String(timeLeft.hours).padStart(2, '0')}h{' '}
-      {String(timeLeft.minutes).padStart(2, '0')}m{' '}
-      {String(timeLeft.seconds).padStart(2, '0')}s
+    <span className="tabular-nums tracking-wide">
+      {t.days}d {String(t.hours).padStart(2, '0')}h{' '}
+      {String(t.minutes).padStart(2, '0')}m{' '}
+      {String(t.seconds).padStart(2, '0')}s
     </span>
   );
 }
